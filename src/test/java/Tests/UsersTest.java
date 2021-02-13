@@ -16,7 +16,7 @@ public class UsersTest extends TestConfig {
 
         int userId =
                 given()
-                        .param("username", "Non existing user")
+                        .param("username", "Delphine")
                 .when()
                         .get("/users")
                 .then()
