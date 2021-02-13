@@ -15,8 +15,10 @@ public class UsersTest extends TestConfig {
     public void verifyEmailsHaveCorrectFormat() {
 
         int userId =
-                given().param("username", "Delphine")
-                .when().get("/users")
+                given()
+                        .param("username", "Delphine")
+                .when()
+                        .get("/users")
                 .then()
                         .body("size()", is(1), "[0].username", is("Delphine"))
                         .extract()
@@ -24,13 +26,19 @@ public class UsersTest extends TestConfig {
 
 
         ArrayList<Integer> postIds =
-                given().param("userId", userId)
-                .when().get("/posts")
-                .then().extract().path("id");
+                given()
+                        .param("userId", userId)
+                .when()
+                        .get("/posts")
+                .then()
+                        .extract()
+                        .path("id");
 
 
-        given().param("postId", postIds)
-        .when().get("/comments")
+        given()
+                .param("postId", postIds)
+        .when()
+                .get("/comments")
         .then()
                 .assertThat()
                 .body("email",
