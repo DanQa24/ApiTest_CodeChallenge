@@ -13,14 +13,15 @@ public class UsersTest extends TestConfig {
 
     @Test
     public void verifyEmailsHaveCorrectFormat() {
+        String username = "Delphine";
 
         int userId =
                 given()
-                        .param("username", "Delphine")
+                        .param("username", username)
                 .when()
-                        .get("/users")
+                        .get(BlogEndpoints.USERS)
                 .then()
-                        .body("size()", is(1), "[0].username", is("Delphine"))
+                        .body("size()", is(1), "[0].username", is(username))
                         .extract()
                         .path("[0].id");
 
@@ -29,7 +30,7 @@ public class UsersTest extends TestConfig {
                 given()
                         .param("userId", userId)
                 .when()
-                        .get("/posts")
+                        .get(BlogEndpoints.POSTS)
                 .then()
                         .extract()
                         .path("id");
@@ -38,7 +39,7 @@ public class UsersTest extends TestConfig {
         given()
                 .param("postId", postIds)
         .when()
-                .get("/comments")
+                .get(BlogEndpoints.COMMENTS)
         .then()
                 .assertThat()
                 .body("email",
