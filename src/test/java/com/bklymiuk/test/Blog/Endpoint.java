@@ -1,6 +1,6 @@
-package Config;
+package com.bklymiuk.test.Blog;
 
-public interface BlogEndpoints {
+public interface Endpoint {
 
     String USERS = "/users";
     String COMMENTS = "/comments";
