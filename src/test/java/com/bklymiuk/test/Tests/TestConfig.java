@@ -3,6 +3,8 @@ package com.bklymiuk.test.Tests;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
+import io.restassured.filter.log.RequestLoggingFilter;
+import io.restassured.filter.log.ResponseLoggingFilter;
 import org.testng.annotations.BeforeTest;
 
 
@@ -14,11 +16,14 @@ public class TestConfig {
                 .setBaseUri("https://jsonplaceholder.typicode.com")
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Accept", "application/json")
+                .addFilter(new RequestLoggingFilter())
+                .addFilter(new ResponseLoggingFilter())
                 .build();
 
 
         RestAssured.responseSpecification = new ResponseSpecBuilder()
                 .expectContentType("application/json")
+                .expectStatusCode(200)
                 .build();
     }
 }

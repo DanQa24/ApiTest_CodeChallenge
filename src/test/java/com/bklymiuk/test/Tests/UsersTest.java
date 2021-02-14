@@ -1,81 +1,76 @@
 package com.bklymiuk.test.Tests;
 
 import com.bklymiuk.test.Blog.Endpoint;
+import com.bklymiuk.test.Utils.RequestBuilder;
 import org.testng.annotations.Test;
+
 import java.util.ArrayList;
-import static io.restassured.RestAssured.*;
+
 import static org.hamcrest.Matchers.*;
 
 
-public class UsersTest extends TestConfig {
+public class UsersTest extends TestConfig implements RequestBuilder {
 
-    @Test(description = "Verify that User Id is returned when search by valid username")
-    public void getUserIdByValidUsername() {
-        String validUsername = "Delphine";
 
-        given()
-                .param("username", validUsername)
-        .when()
-                .log().method()
-                .log().params()
-                .get(Endpoint.USERS)
-        .then()
-                .log().status()
-                .log().body()
+    @Test(description = "GET user by valid username")
+    public void getUserByValidUsername() {
+        String userName = "Delphine";
+
+        RequestBuilder.getResourceBy("username", userName, Endpoint.USERS)
+                .then()
                 .assertThat()
-                .statusCode(200)
-                .body("size()", is(1), "[0].username", is(validUsername));
+                .body("size()", is(1))
+                .body("[0].username", is(userName));
     }
 
 
-    @Test(description = "Expect Status Code 404 when try to get non existing user")
-    public void getUserIdByInvalidUsername() {
-        String invalidUser = "Non existing username";
+    @Test(description = "GET user by invalid username")
+    public void getUserByInvalidUsername() {
+        String invalidUsername = "Non existing username";
 
-        given()
-                .param("username", invalidUser)
-        .when()
-                .log().method()
-                .log().params()
-                .get(Endpoint.USERS)
-        .then()
-                .log().status()
+        RequestBuilder.getResourceBy("username", invalidUsername, Endpoint.USERS)
+                .then()
                 .assertThat()
-                .statusCode(404);
+                .body("size()", is(0));
     }
 
 
-    @Test(description = "Verify email format is valid in comments under all posts of the user")
+    @Test(description = "GET all posts by valid User Id")
+    public void getPostsByUserId() {
+        int userId = 5;
+
+        RequestBuilder.getResourceBy("userId", userId, Endpoint.POSTS)
+                .then()
+                .assertThat()
+                .body("[0].userId", is(userId));
+    }
+
+
+    @Test(description = "GET all comments under posts of specific user, validate email addresses format")
     public void verifyEmailsHaveValidFormat() {
-        String username = "Delphine";
+        String userName = "Delphine";
         String validFormat = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
 
+
         int userId =
-                given()
-                        .param("username", username)
-                .when()
-                        .get(Endpoint.USERS)
+                RequestBuilder.getResourceBy("username", userName, Endpoint.USERS)
                 .then()
+                        .body("size()", is(1), "[0].username", is(userName))
                         .extract()
                         .path("[0].id");
 
         ArrayList<Integer> postIds =
-                given()
-                        .param("userId", userId)
-                .when()
-                        .get(Endpoint.POSTS)
-                .then()
+                RequestBuilder.getResourceBy("userId", userId, Endpoint.POSTS)
+                        .then()
                         .extract()
                         .path("id");
 
-        given()
-                .param("postId", postIds)
-        .when()
-                .get(Endpoint.COMMENTS)
-        .then()
+        RequestBuilder.getResourceBy("postId", postIds, Endpoint.COMMENTS)
+                .then()
                 .assertThat()
-                .body("email",
-                        everyItem(matchesPattern(validFormat)));
+                .body("postId", everyItem(in(postIds)))
+                .body("email", everyItem(matchesPattern(validFormat)));
     }
+
 }
 
