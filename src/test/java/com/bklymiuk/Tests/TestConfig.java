@@ -1,4 +1,4 @@
-package com.bklymiuk.test.Tests;
+package com.bklymiuk.Tests;
 
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
@@ -8,7 +8,7 @@ import io.restassured.filter.log.ResponseLoggingFilter;
 import org.testng.annotations.BeforeTest;
 
 
-public class TestConfig {
+public abstract class TestConfig {
 
     @BeforeTest(description = "Setup Request and Response specifications")
     public static void setup() {

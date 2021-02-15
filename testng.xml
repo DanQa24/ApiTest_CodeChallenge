@@ -3,8 +3,10 @@
 <suite name="ApiTestSuite" verbose="1" >
     <test name="Email validation" >
         <classes>
-            <class name="com.bklymiuk.test.Tests.UsersTest" />
-            <class name="com.bklymiuk.test.Tests.EmailFormatTest"/>
+            <class name="com.bklymiuk.Tests.UsersTest" />
+            <class name="com.bklymiuk.Tests.PostsTest"/>
+            <class name="com.bklymiuk.Tests.CommentsTest"/>
+
         </classes>
     </test>
 

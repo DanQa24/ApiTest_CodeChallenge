@@ -1,4 +1,4 @@
-package com.bklymiuk.test.Blog;
+package com.bklymiuk.Blog;
 
 public interface Endpoint {
 
