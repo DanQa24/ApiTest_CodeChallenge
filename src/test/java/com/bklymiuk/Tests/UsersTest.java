@@ -10,9 +10,9 @@ import static org.hamcrest.Matchers.*;
 public class UsersTest extends TestConfig implements RequestBuilder {
 
     @Test(description = "Validate the structure of each User in response")
-    @Description("Verify that all posts have UserId, Id, Title and Body")
+    @Description("Verify that all users have Id, Name, Username, Email, Address, Phone, Website, Company")
     public void validateUsersBody() {
-        RequestBuilder.getResource(Endpoint.POSTS)
+        RequestBuilder.getResource(Endpoint.USERS)
                 .then()
                 .assertThat()
                 .body("$", everyItem(hasKey("id")))
